@@ -2,7 +2,7 @@ const Product = require("../models/productModel");
 
 
 // Add a New Product
-exports.addProduct = async (req, res) => {
+const addProduct = async (req, res) => {
     const { name, category, description, price, discount } = req.body;
     const sellerId = req.user.id; 
 
@@ -25,7 +25,7 @@ exports.addProduct = async (req, res) => {
 };
 
 // Edit a Product
-exports.editProduct = async (req, res) => {
+const editProduct = async (req, res) => {
     const { productId } = req.params;
     const { name, category, description, price, discount } = req.body;
     const sellerId = req.user.id; 
@@ -54,7 +54,7 @@ exports.editProduct = async (req, res) => {
 };
 
 // Delete a Product
-exports.deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res) => {
     const { productId } = req.params;
     const sellerId = req.user.id; 
 
@@ -74,7 +74,7 @@ exports.deleteProduct = async (req, res) => {
     }
 };
 
-exports.getSellerProducts = async (req, res) => {
+const getSellerProducts = async (req, res) => {
     const sellerId = req.user.id; 
 
     try {
@@ -86,3 +86,12 @@ exports.getSellerProducts = async (req, res) => {
         return res.status(500).json({ message: 'Server error.' });
     }
 };
+
+module.exports =  {
+    addProduct, 
+    editProduct, 
+    deleteProduct,
+    getSellerProducts
+
+}
+    

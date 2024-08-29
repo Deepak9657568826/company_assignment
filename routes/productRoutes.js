@@ -1,18 +1,26 @@
 const express = require('express');
-const router = express.Router();
-const productController = require('../controllers/productController');
-const authMiddleware = require('../middlewares/authMiddleware');
-const roleMiddleware = require('../middlewares/roleMiddleware');
+const productRoutes = express.Router();
+const {addProduct, editProduct, deleteProduct, getSellerProducts} = require('../controllers/productController');
+const {roleMiddleware} = require("../middlewares/roleMiddleware")
+const { authMiddleware } = require('../middlewares/authMiddleware');
 
-router.use(authMiddleware.authenticate);
-router.post('/add', roleMiddleware.checkRole('seller'), productController.addProduct);
+productRoutes.use(authMiddleware);
 
-router.put('/update/:id', roleMiddleware.checkRole('seller'), productController.updateProduct);
+productRoutes.post('/add', roleMiddleware('seller')  , addProduct);
 
-router.delete('/delete/:id', roleMiddleware.checkRole('seller'), productController.deleteProduct);
+productRoutes.put('/update/:id', roleMiddleware('seller'), editProduct);
 
-router.get('/', productController.getAllProducts);
+productRoutes.delete('/delete/:id', roleMiddleware('seller'), deleteProduct);
 
-router.get('/:id', productController.getProductById);
+productRoutes.get('/', getSellerProducts);
 
-module.exports = router;
+module.exports = productRoutes;
+
+
+// module.exports =  {
+//     addProduct, 
+//     editProduct, 
+//     deleteProduct,
+//     getSellerProducts
+
+// }

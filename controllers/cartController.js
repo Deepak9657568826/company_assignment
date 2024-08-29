@@ -1,7 +1,8 @@
-const { Cart, Product } = require('../models');
+const CartItem = require("../models/cartModel");
+const Product = require("../models/productModel");
 
 // Add a Product to Cart
-exports.addToCart = async (req, res) => {
+const addToCart = async (req, res) => {
     const { productId } = req.body;
     const buyerId = req.user.id;
 
@@ -12,13 +13,13 @@ exports.addToCart = async (req, res) => {
             return res.status(404).json({ message: 'Product not found.' });
         }
 
-        const existingCartItem = await Cart.findOne({ where: { buyerId, productId } });
+        const existingCartItem = await CartItem.findOne({ where: { buyerId, productId } });
 
         if (existingCartItem) {
             return res.status(400).json({ message: 'Product is already in your cart.' });
         }
 
-        const cartItem = await Cart.create({ buyerId, productId });
+        const cartItem = await CartItem.create({ buyerId, productId });
 
         return res.status(201).json({ message: 'Product added to cart successfully!', cartItem });
     } catch (error) {
@@ -28,12 +29,12 @@ exports.addToCart = async (req, res) => {
 };
 
 // Remove a Product from Cart
-exports.removeFromCart = async (req, res) => {
+const removeFromCart = async (req, res) => {
     const { productId } = req.params;
     const buyerId = req.user.id; 
 
     try {
-        const cartItem = await Cart.findOne({ where: { buyerId, productId } });
+        const cartItem = await CartItem.findOne({ where: { buyerId, productId } });
 
         if (!cartItem) {
             return res.status(404).json({ message: 'Product not found in your cart.' });
@@ -49,11 +50,11 @@ exports.removeFromCart = async (req, res) => {
 };
 
 // View Cart
-exports.viewCart = async (req, res) => {
+const viewCart = async (req, res) => {
     const buyerId = req.user.id; 
 
     try {
-        const cartItems = await Cart.findAll({
+        const cartItems = await CartItem.findAll({
             where: { buyerId },
             include: [{ model: Product, attributes: ['name', 'category', 'description', 'price', 'discount'] }]
         });
@@ -68,3 +69,9 @@ exports.viewCart = async (req, res) => {
         return res.status(500).json({ message: 'Server error.' });
     }
 };
+
+module.exports = {
+    addToCart, 
+    removeFromCart, 
+    viewCart
+}

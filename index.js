@@ -10,14 +10,12 @@ const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const { errorHandler } = require('./middlewares/errorMiddleware');
+const authrouter = require('./routes/authRoutes');
 
 const app = express();
 
 // Middleware
 app.use(cors()); 
-app.use(helmet()); 
-app.use(morgan('dev')); 
-app.use(compression()); 
 app.use(express.json()); 
 
 // PostgreSQL Connection
@@ -32,12 +30,14 @@ pool.connect()
     .catch(err => console.error('Error connecting to PostgreSQL database', err));
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authrouter);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 
 // Error Handling Middleware
-app.use(errorHandler);
+// app.use(errorHandler);
+
+
 
 // Server Listening
 const PORT = process.env.PORT || 5000;
