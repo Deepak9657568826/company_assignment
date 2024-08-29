@@ -54,7 +54,7 @@ This is a simple e-commerce application REST API built with Node.js, Express.js,
 ├── server.js                   # Entry point of the application
 ├── README.md                   # Documentation of the project
 
-# API Documentation
+## API Documentation
 Authentication
 Sign Up
 POST /api/auth/signup
